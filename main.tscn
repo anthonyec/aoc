@@ -1,6 +1,41 @@
 [gd_scene load_steps=2 format=3 uid="uid://dmy1bdeohokp"]
 
-[ext_resource type="Script" path="res://day_01/day_01.gd" id="1_yyhq7"]
+[sub_resource type="GDScript" id="GDScript_brxfx"]
+script/source = "extends Node
+
+enum ParserState {
+	CHARACTER,
+	NUMBER,
+	COLOR,
+}
+
+func _init() -> void:
+	run(\"res://day_02/example_1.txt\", { \"red\": 12, \"green\": 13, \"blue\": 14 })
+
+## Returns a tuple of the anwsers for part 1 and part 2.
+func run(path: String, rules: Dictionary = {}) -> Array[int]:
+	var file = FileAccess.open(path, FileAccess.READ)
+	assert(file, \"Failed to read file\")
+	
+	var line: String = file.get_line()
+	var state: ParserState = ParserState.CHARACTER
+	
+	while line:
+		var index: int = 0
+		var buffer: String
+		var char: String
+		
+		while index < line.length():
+			char = line[index]
+			
+			char.is_valid_int()
+			
+			index += 1
+			
+		line = file.get_line()
+	
+	return []
+"
 
 [node name="Main" type="Node2D"]
-script = ExtResource("1_yyhq7")
+script = SubResource("GDScript_brxfx")
