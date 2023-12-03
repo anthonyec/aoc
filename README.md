@@ -1,4 +1,4 @@
-# 🎄 Advent of Code 2023 in Godot
+# 🎄 Advent of Code 2023 using GDScript and Godot
 
 <pre align="center">
     *
