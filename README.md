@@ -1,5 +1,7 @@
 # 🎄 Advent of Code 2023 in Godot
 
+> Using Godot's GDScript for my first advent of code
+
 <pre align="center">
     *
     /.\

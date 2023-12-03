@@ -3,7 +3,8 @@ extends Node
 func _init() -> void:
 	assert(run("res://day_03/example_1.txt") == [4361, 467835])
 	assert(run("res://day_03/input.txt") == [535078, 75312571])
-	
+
+## Convert a 2D coordinate to an 1D array index.
 func get_cell_index(size: Vector2i, coordinate: Vector2i) -> int:
 	var x_w = clamp(coordinate.x, 0, size.x - 1)
 	var y_w = clamp(coordinate.y, 0, size.y - 1)
@@ -20,7 +21,7 @@ func run(path: String) -> Array[int]:
 	var height = schematic.size() / width
 	var size = Vector2i(width, height)
 	
-	# Gear coordinate to array of part numbers.
+	# Map gear coordinate to array of part numbers, e.g `{ (2,3): [12, 0] }`.
 	var gears: Dictionary = {}
 	var sum: int = 0
 	
@@ -28,9 +29,11 @@ func run(path: String) -> Array[int]:
 	var part_number_coordinate: Vector2i
 	
 	for index in schematic.size():
+		# Check every character in the schematic.
 		var value = schematic[index]
 		var coordinate = Vector2i(index % size.x, index / size.x)
 		
+		# If the character is a integar, start building up a part number.
 		if value.is_valid_int():
 			# Build part number and set it's origin coordinate.
 			if part_number_buffer.is_empty(): part_number_coordinate = coordinate
@@ -38,6 +41,8 @@ func run(path: String) -> Array[int]:
 			
 		var not_int_or_at_end = not value.is_valid_int() or index == schematic.size() - 1
 		
+		# If the character is not a number or we're at end of the schematic, 
+		# consume and process the part number, checking it's adjacent chars etc.
 		if not_int_or_at_end and not part_number_buffer.is_empty():
 			# Consume part number and flush buffer.
 			var part_number_width = part_number_buffer.length()
@@ -53,17 +58,18 @@ func run(path: String) -> Array[int]:
 					var adjacent_index = get_cell_index(size, adjacent_coordinate)
 					var adjacent_value = schematic[adjacent_index]
 					
-					# Keep track of numbers next to gears.
+					# Keep track of numbers next to gears for later.
 					if adjacent_value == "*":
 						var gear_ratios = gears.get(adjacent_coordinate, [])
 						
 						gear_ratios.append(part_number)
 						gears[adjacent_coordinate] = gear_ratios
 					
+					# Sum the part number.
 					if adjacent_value != "." and not adjacent_value.is_valid_int():
 						sum += part_number
 	
-	# Sum up all the ratios that have two part numbers.
+	# Sum up all the gears that have two part numbers.
 	var ratio_sum: int = 0
 	
 	for coordinate in gears:
